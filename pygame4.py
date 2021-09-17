@@ -35,7 +35,9 @@ class Player(pygame.sprite.Sprite):
     
 negro = 0,0,0
 blanco = 255,255,255
-
+pygame.init()
+pygame.mixer.music.load('C:/Users/efren/Documents/Tec de Monterrey/5to semestre/Semana tec herramientas computacionales/Juego Kemonito/luchadores2.mp3')
+pygame.mixer.music.play(1)
 def main():
     
     pygame.init()
@@ -44,10 +46,15 @@ def main():
     clock = pygame.time.Clock()
     run = True
     score = 0
+    
+    width = 1140
+    height = 600
+    i = 0
 
-    fondo = pygame.image.load('C:/Users/efren/Documents/Tec de Monterrey/5to semestre/Semana tec herramientas computacionales/Juego Kemonito/ringg.jpg')
+    fondo = pygame.image.load('C:/Users/efren/Documents/Tec de Monterrey/5to semestre/Semana tec herramientas computacionales/Juego Kemonito/RingSolo.jpg')
     fondorect = fondo.get_rect();
-
+    bg = pygame.transform.scale(fondo, (1140,600) )
+    
     all_sprite_list = pygame.sprite.Group()
     meteor_list = pygame.sprite.Group()
     laser_list = pygame.sprite.Group()
@@ -67,6 +74,10 @@ def main():
     texto = fuente.render("Jugador 1", 0, (100,100,0)) #el segundo parametro es el borde y la ultima es el color
 
     speed=[1,1]
+    
+    sound = pygame.mixer.Sound('C:/Users/efren/Documents/Tec de Monterrey/5to semestre/Semana tec herramientas computacionales/Juego Kemonito/bonk2.mp3')
+    #pygame.mixer.music.load('C:/Users/edgar/OneDrive/Escritorio/luchadores2.mp3')
+    #pygame.mixer.music.play(1)
 
     while run:
         for event in pygame.event.get(): #se captura el evento que se produce
@@ -80,6 +91,7 @@ def main():
 
                 all_sprite_list.add(laser)
                 laser_list.add(laser)
+                sound.play()
     
         all_sprite_list.update()
         
@@ -104,11 +116,26 @@ def main():
                 all_sprite_list.remove(laser)
                 laser_list.remove(laser)
         
+        screen.fill((0,0,0))
+        screen.blit(bg, (i,0))
+        #screen.blit(bg, (0,i))
+        screen.blit(bg, (width+i,0))
+        #screen.blit(bg, (0,height+i))
+
+        if i == -width:
+        #if i == -height:
+            screen.blit(bg, (width+i, 0))
+            #screen.blit(bg, (0, height+i))
+            i = 0
+
+        i -= 3
+        
+        
         if(score==20 or len(meteor_list)==0):
             main()
         
         #screen.fill(blanco)
-        screen.blit(fondo, fondorect)
+        #screen.blit(fondo, fondorect)
         marcador1 = fuente.render("Score:"+str(score), 0, (100,100,0))
         screen.blit(marcador1, (950, 40))
         all_sprite_list.draw(screen) #se pintan todos los sprites
